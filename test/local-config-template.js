@@ -1,5 +1,5 @@
 module.exports = {
-  site0: {
-    id: '<SITE-ID>',
+  form0: {
+    id: '<FORM-ID>',
   },
 }

@@ -37,56 +37,18 @@ describe('typeform-provider', () => {
     await SenecaMsgTest(seneca, BasicMessages)()
   })
 
-  test('site-basic', async () => {
+  test('form-basic', async () => {
     if (!Config) return
     const seneca = await makeSeneca()
 
     // does this:   const sites = await typeform.sites();
-    const list = await seneca.entity('provider/typeform/site').list$()
+    const list = await seneca.entity('provider/typeform/forms').list$()
     expect(list.length > 0).toBeTruthy()
 
-    const site0 = await seneca
-      .entity('provider/typeform/site')
-      .load$(Config.site0.id)
-    expect(site0.name).toContain(Config.site0.name)
-  })
-
-  test('collection-basic', async () => {
-    if (!Config) return
-    const seneca = await makeSeneca()
-
-    const list = await seneca
-      .entity('provider/typeform/collection')
-      .list$(Config.site0.id)
-    expect(list.length > 0).toBeTruthy()
-
-    const collection0 = await seneca
-      .entity('provider/typeform/collection')
-      .load$({
-        siteId: Config.site0.id,
-        collectionId: Config.site0.collections.collection0.id,
-      })
-    expect(collection0.name).toContain(
-      Config.site0.collections.collection0.name
-    )
-  })
-
-  test('item-basic', async () => {
-    if (!Config) return
-    const seneca = await makeSeneca()
-
-    const list = await seneca
-      .entity('provider/typeform/item')
-      .list$(Config.site0.collections.collection0.id)
-    expect(list.length > 0).toBeTruthy()
-
-    const item0 = await seneca.entity('provider/typeform/item').load$({
-      collectionId: Config.site0.collections.collection0.id,
-      itemId: Config.site0.collections.collection0.items.item0.id,
-    })
-    expect(item0.name).toContain(
-      Config.site0.collections.collection0.items.item0.name
-    )
+    const form0 = await seneca
+      .entity('provider/typeform/forms')
+      .load$(Config.form0.id)
+    expect(form0.name).toContain(Config.form0.name)
   })
 
   test('maintain', async () => {
@@ -103,14 +65,14 @@ async function makeSeneca() {
       // debug: true,
       file: [__dirname + '/local-env.js;?'],
       var: {
-        $WEBFLOW_ACCESSTOKEN: String,
+        $TYPEFORM_ACCESSTOKEN: String,
       },
     })
     .use('provider', {
       provider: {
         typeform: {
           keys: {
-            accesstoken: { value: '$WEBFLOW_ACCESSTOKEN' },
+            accesstoken: { value: '$TYPEFORM_ACCESSTOKEN' },
           },
         },
       },
