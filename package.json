@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "@seneca/maintain": "^0.0.27",
-    "typeform-api": "^1.2.2"
+    "@typeform/api-client": "^1.7.0"
   },
   "peerDependencies": {
     "@seneca/env": ">=0.2",
