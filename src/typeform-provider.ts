@@ -32,6 +32,19 @@ function TypeformProvider(this: any, options: TypeformProviderOptions) {
     entity: {
       form: {
         cmd: {
+          create: {
+            action: async function (this: any, entsize: any, data: any) {
+              try {
+                let res = await this.shared.sdk.forms.create(
+                  data = data
+                )
+                return entsize(res)
+              } catch (e: any) {
+                throw e
+              }
+            },
+          },
+
           list: {
             action: async function (this: any, entsize: any, msg: any) {
               let res = await this.shared.sdk.forms.list()
@@ -46,7 +59,7 @@ function TypeformProvider(this: any, options: TypeformProviderOptions) {
               let id = q.id
 
               try {
-                let res = await this.shared.sdk.forms.get({ uid: id })
+                let res = await this.shared.sdk.forms.get(id)
                 return entize(res)
               } catch (e: any) {
                 if (e.message.includes('invalid id')) {
