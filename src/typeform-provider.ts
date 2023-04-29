@@ -30,127 +30,35 @@ function TypeformProvider(this: any, options: TypeformProviderOptions) {
       name: 'typeform',
     },
     entity: {
-      // site: {
-      //   cmd: {
-      //     list: {
-      //       action: async function (this: any, entsize: any, msg: any) {
-      //         let res = await this.shared.sdk.sites()
-      //         let list = res.map((data: any) => entsize(data))
-      //         return list
-      //       },
-      //     },
+      form: {
+        cmd: {
+          list: {
+            action: async function (this: any, entsize: any, msg: any) {
+              let res = await this.shared.sdk.forms.list()
+              let list = res.map((data: any) => entsize(data))
+              return list
+            },
+          },
 
-      //     load: {
-      //       action: async function (this: any, entize: any, msg: any) {
-      //         let q = msg.q || {}
-      //         let id = q.id
+          load: {
+            action: async function (this: any, entize: any, msg: any) {
+              let q = msg.q || {}
+              let id = q.id
 
-      //         try {
-      //           let res = await this.shared.sdk.site({ siteId: id })
-      //           return entize(res)
-      //         } catch (e: any) {
-      //           if (e.message.includes('invalid id')) {
-      //             return null
-      //           } else {
-      //             throw e
-      //           }
-      //         }
-      //       },
-      //     },
-      //   },
-      // },
-
-      // collection: {
-      //   cmd: {
-      //     list: {
-      //       action: async function (this: any, entize: any, msg: any) {
-      //         let q = msg.q || {}
-      //         let id = q.id
-
-      //         try {
-      //           let preres = await this.shared.sdk.site({ siteId: id })
-      //           let res = await preres.collections()
-      //           return res
-      //         } catch (e: any) {
-      //           if (e.message.includes('invalid id')) {
-      //             return null
-      //           } else {
-      //             throw e
-      //           }
-      //         }
-      //       },
-      //     },
-
-      //     load: {
-      //       action: async function (this: any, entize: any, msg: any) {
-      //         let q = msg.q || {}
-      //         let siteId = q.siteId
-      //         let collectionId = q.collectionId
-
-      //         try {
-      //           let preres = await this.shared.sdk.site({ siteId: siteId })
-      //           let res = await preres.collection({
-      //             collectionId: collectionId,
-      //           })
-      //           return entize(res)
-      //         } catch (e: any) {
-      //           if (e.message.includes('invalid id')) {
-      //             return null
-      //           } else {
-      //             throw e
-      //           }
-      //         }
-      //       },
-      //     },
-      //   },
-      // },
-
-      // item: {
-      //   cmd: {
-      //     list: {
-      //       action: async function (this: any, entsize: any, msg: any) {
-      //         let q = msg.q || {}
-      //         let id = q.id
-
-      //         try {
-      //           let preres = await this.shared.sdk.collection({
-      //             collectionId: id,
-      //           })
-      //           let res = await preres.items()
-      //           return res
-      //         } catch (e: any) {
-      //           if (e.message.includes('invalid id')) {
-      //             return null
-      //           } else {
-      //             throw e
-      //           }
-      //         }
-      //       },
-      //     },
-
-      //     load: {
-      //       action: async function (this: any, entsize: any, msg: any) {
-      //         let q = msg.q || {}
-      //         let collectionId = q.collectionId
-      //         let itemId = q.itemId
-
-      //         try {
-      //           let preres = await this.shared.sdk.collection({
-      //             collectionId: collectionId,
-      //           })
-      //           let res = await preres.item({ itemId: itemId })
-      //           return entsize(res)
-      //         } catch (e: any) {
-      //           if (e.message.includes('invalid id')) {
-      //             return null
-      //           } else {
-      //             throw e
-      //           }
-      //         }
-      //       },
-      //     },
-      //   },
-      // },
+              try {
+                let res = await this.shared.sdk.forms.get({ uid: id })
+                return entize(res)
+              } catch (e: any) {
+                if (e.message.includes('invalid id')) {
+                  return null
+                } else {
+                  throw e
+                }
+              }
+            },
+          },
+        },
+      },
     },
   })
 
