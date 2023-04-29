@@ -49,6 +49,21 @@ describe('typeform-provider', () => {
       .entity('provider/typeform/forms')
       .load$(Config.form0.id)
     expect(form0.name).toContain(Config.form0.name)
+
+    const form1 = await seneca.entity('provider/typeform/forms').create$(
+      Config.form1CreateReqBody
+    )
+    expect(form1.name).toContain(Config.form1CreateReqBody.name)
+
+    const updatedData = {
+      ...Config.form1CreateReqBody,
+      name: 'Updated Name'
+    }
+
+    const form1 = await seneca.entity('provider/typeform/forms').create$(
+      form1.id, updatedData, true
+    )
+    expect(form1.name).toContain(updatedData.name)
   })
 
   test('maintain', async () => {
