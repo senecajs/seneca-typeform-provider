@@ -2,32 +2,32 @@
 
 const Pkg = require('../package.json')
 
-const Webflow = require('webflow-api')
+const Typeform = require('typeform-api')
 
-type WebflowProviderOptions = {}
+type TypeformProviderOptions = {}
 
-function WebflowProvider(this: any, options: WebflowProviderOptions) {
+function TypeformProvider(this: any, options: TypeformProviderOptions) {
   const seneca: any = this
 
   const entityBuilder = this.export('provider/entityBuilder')
 
-  seneca.message('sys:provider,provider:webflow,get:info', get_info)
+  seneca.message('sys:provider,provider:typeform,get:info', get_info)
 
   async function get_info(this: any, _msg: any) {
     return {
       ok: true,
-      name: 'webflow',
+      name: 'typeform',
       version: Pkg.version,
       sdk: {
-        name: 'webflow',
-        version: Pkg.dependencies['webflow-api'],
+        name: 'typeform',
+        version: Pkg.dependencies['typeform-api'],
       },
     }
   }
 
   entityBuilder(this, {
     provider: {
-      name: 'webflow',
+      name: 'typeform',
     },
     entity: {
       site: {
@@ -156,12 +156,12 @@ function WebflowProvider(this: any, options: WebflowProviderOptions) {
 
   seneca.prepare(async function (this: any) {
     let res = await this.post(
-      'sys:provider,get:keymap,provider:webflow,key:accesstoken'
+      'sys:provider,get:keymap,provider:typeform,key:accesstoken'
     )
 
     let token = res.keymap.accesstoken.value
 
-    this.shared.sdk = new Webflow({ token })
+    this.shared.sdk = new Typeform({ token })
   })
 
   return {
@@ -172,15 +172,15 @@ function WebflowProvider(this: any, options: WebflowProviderOptions) {
 }
 
 // Default options.
-const defaults: WebflowProviderOptions = {
+const defaults: TypeformProviderOptions = {
   // TODO: Enable debug logging
   debug: false,
 }
 
-Object.assign(WebflowProvider, { defaults })
+Object.assign(TypeformProvider, { defaults })
 
-export default WebflowProvider
+export default TypeformProvider
 
 if ('undefined' !== typeof module) {
-  module.exports = WebflowProvider
+  module.exports = TypeformProvider
 }

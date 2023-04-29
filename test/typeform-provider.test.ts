@@ -6,8 +6,8 @@ const Seneca = require('seneca')
 const SenecaMsgTest = require('seneca-msg-test')
 const { Maintain } = require('@seneca/maintain')
 
-import WebflowProvider from '../src/webflow-provider'
-import WebflowProviderDoc from '../src/WebflowProvider-doc'
+import TypeformProvider from '../src/typeform-provider'
+import TypeformProviderDoc from '../src/TypeformProvider-doc'
 
 const BasicMessages = require('./basic.messages.js')
 
@@ -17,18 +17,18 @@ if (Fs.existsSync(__dirname + '/local-config.js')) {
   Config = require('./local-config')
 }
 
-describe('webflow-provider', () => {
+describe('typeform-provider', () => {
   test('happy', async () => {
-    expect(WebflowProvider).toBeDefined()
-    expect(WebflowProviderDoc).toBeDefined()
+    expect(TypeformProvider).toBeDefined()
+    expect(TypeformProviderDoc).toBeDefined()
 
     const seneca = await makeSeneca()
 
     expect(
-      await seneca.post('sys:provider,provider:webflow,get:info')
+      await seneca.post('sys:provider,provider:typeform,get:info')
     ).toMatchObject({
       ok: true,
-      name: 'webflow',
+      name: 'typeform',
     })
   })
 
@@ -41,12 +41,12 @@ describe('webflow-provider', () => {
     if (!Config) return
     const seneca = await makeSeneca()
 
-    // does this:   const sites = await webflow.sites();
-    const list = await seneca.entity('provider/webflow/site').list$()
+    // does this:   const sites = await typeform.sites();
+    const list = await seneca.entity('provider/typeform/site').list$()
     expect(list.length > 0).toBeTruthy()
 
     const site0 = await seneca
-      .entity('provider/webflow/site')
+      .entity('provider/typeform/site')
       .load$(Config.site0.id)
     expect(site0.name).toContain(Config.site0.name)
   })
@@ -56,12 +56,12 @@ describe('webflow-provider', () => {
     const seneca = await makeSeneca()
 
     const list = await seneca
-      .entity('provider/webflow/collection')
+      .entity('provider/typeform/collection')
       .list$(Config.site0.id)
     expect(list.length > 0).toBeTruthy()
 
     const collection0 = await seneca
-      .entity('provider/webflow/collection')
+      .entity('provider/typeform/collection')
       .load$({
         siteId: Config.site0.id,
         collectionId: Config.site0.collections.collection0.id,
@@ -76,11 +76,11 @@ describe('webflow-provider', () => {
     const seneca = await makeSeneca()
 
     const list = await seneca
-      .entity('provider/webflow/item')
+      .entity('provider/typeform/item')
       .list$(Config.site0.collections.collection0.id)
     expect(list.length > 0).toBeTruthy()
 
-    const item0 = await seneca.entity('provider/webflow/item').load$({
+    const item0 = await seneca.entity('provider/typeform/item').load$({
       collectionId: Config.site0.collections.collection0.id,
       itemId: Config.site0.collections.collection0.items.item0.id,
     })
@@ -108,14 +108,14 @@ async function makeSeneca() {
     })
     .use('provider', {
       provider: {
-        webflow: {
+        typeform: {
           keys: {
             accesstoken: { value: '$WEBFLOW_ACCESSTOKEN' },
           },
         },
       },
     })
-    .use(WebflowProvider)
+    .use(TypeformProvider)
 
   return seneca.ready()
 }

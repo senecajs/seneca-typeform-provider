@@ -1,15 +1,15 @@
 {
-  "name": "@seneca/webflow-provider",
+  "name": "@seneca/typeform-provider",
   "version": "0.1.2",
-  "main": "dist/webflow-provider.js",
+  "main": "dist/typeform-provider.js",
   "type": "commonjs",
-  "types": "dist/webflow-provider.d.ts",
+  "types": "dist/typeform-provider.d.ts",
   "description": "Seneca entity provider for the Webflow CMS API.",
-  "homepage": "https://github.com/senecajs/seneca-webflow-provider",
+  "homepage": "https://github.com/senecajs/seneca-typeform-provider",
   "keywords": [
     "seneca",
-    "webflow",
-    "webflow-provider",
+    "typeform",
+    "typeform-provider",
     "cms"
   ],
   "author": "Richard Rodger - richardrodger.com",
@@ -19,7 +19,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/senecajs/seneca-webflow-provider.git"
+    "url": "git://github.com/senecajs/seneca-typeform-provider.git"
   },
   "scripts": {
     "test": "jest --coverage",
@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "@seneca/maintain": "^0.0.27",
-    "webflow-api": "^1.2.2"
+    "typeform-api": "^1.2.2"
   },
   "peerDependencies": {
     "@seneca/env": ">=0.2",
