@@ -45,6 +45,30 @@ function TypeformProvider(this: any, options: TypeformProviderOptions) {
             },
           },
 
+          update: {
+            action: async function (
+                this: any, entsize: any, 
+                msg: any, data: any, 
+                override: boolean = false
+              ) {
+                let q = msg.q || {}
+                let id = q.id
+  
+                try {
+                  let res = await this.shared.sdk.forms.update(
+                    id, data = data, override = override
+                  )
+                  return entsize(res)
+                } catch (e: any) {
+                  if (e.message.includes('invalid id')) {
+                    return null
+                  } else {
+                    throw e
+                  }
+                }
+            },
+          },
+
           list: {
             action: async function (this: any, entsize: any, msg: any) {
               let res = await this.shared.sdk.forms.list()
