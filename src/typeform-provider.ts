@@ -1,8 +1,9 @@
+
 /* Copyright © 2022 Seneca Project Contributors, MIT License. */
 
 const Pkg = require('../package.json')
 
-const { Typeform } = require('@typeform/api-client')
+const { createClient } = require('@typeform/api-client')
 
 type TypeformProviderOptions = {}
 
@@ -20,7 +21,7 @@ function TypeformProvider(this: any, options: TypeformProviderOptions) {
       version: Pkg.version,
       sdk: {
         name: 'typeform',
-        version: Pkg.dependencies['typeform-api'],
+        version: Pkg.dependencies['@typeform/api-client'],
       },
     }
   }
@@ -32,47 +33,10 @@ function TypeformProvider(this: any, options: TypeformProviderOptions) {
     entity: {
       form: {
         cmd: {
-          create: {
-            action: async function (this: any, entsize: any, data: any) {
-              try {
-                let res = await this.shared.sdk.forms.create(
-                  data = data
-                )
-                return entsize(res)
-              } catch (e: any) {
-                throw e
-              }
-            },
-          },
-
-          update: {
-            action: async function (
-                this: any, entsize: any, 
-                msg: any, data: any, 
-                override: boolean = false
-              ) {
-                let q = msg.q || {}
-                let id = q.id
-  
-                try {
-                  let res = await this.shared.sdk.forms.update(
-                    id, data = data, override = override
-                  )
-                  return entsize(res)
-                } catch (e: any) {
-                  if (e.message.includes('invalid id')) {
-                    return null
-                  } else {
-                    throw e
-                  }
-                }
-            },
-          },
-
           list: {
             action: async function (this: any, entsize: any, msg: any) {
               let res = await this.shared.sdk.forms.list()
-              let list = res.map((data: any) => entsize(data))
+              let list = res.items.map((data: any) => entsize(data))
               return list
             },
           },
@@ -83,7 +47,7 @@ function TypeformProvider(this: any, options: TypeformProviderOptions) {
               let id = q.id
 
               try {
-                let res = await this.shared.sdk.forms.get(id)
+                let res = await this.shared.sdk.forms.get({uid: id})
                 return entize(res)
               } catch (e: any) {
                 if (e.message.includes('invalid id')) {
@@ -96,6 +60,58 @@ function TypeformProvider(this: any, options: TypeformProviderOptions) {
           },
         },
       },
+
+      addform: {
+        cmd: {
+          load: {
+            action: async function (this: any, entsize: any, msg: any) {
+              let q = msg.q || {}
+              let data = q.data
+
+              try {
+                let res = await this.shared.sdk.forms.create(
+                  {
+                    data: data
+                  }
+                )
+                return entsize(res)
+              } catch (e: any) {
+                throw e
+              }
+            },
+          }
+        }
+      },
+
+      editform: {
+        cmd: {
+          load: {
+            action: async function (this: any, entsize: any, msg: any) {
+                let q = msg.q || {}
+                let id = q.id
+                let data = q.data
+                let override = q.override
+  
+                try {
+                  let res = await this.shared.sdk.forms.update(
+                    {
+                      uid: id, 
+                      data: data, 
+                      override: override
+                    }
+                  )
+                  return entsize(res)
+                } catch (e: any) {
+                  if (e.message.includes('invalid id')) {
+                    return null
+                  } else {
+                    throw e
+                  }
+                }
+            },
+          },
+        }
+      }
     },
   })
 
@@ -106,7 +122,7 @@ function TypeformProvider(this: any, options: TypeformProviderOptions) {
 
     let token = res.keymap.accesstoken.value
 
-    this.shared.sdk = new Typeform({ token })
+    this.shared.sdk = createClient({ token })
   })
 
   return {

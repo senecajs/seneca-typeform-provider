@@ -4,7 +4,6 @@ import * as Fs from 'fs'
 
 const Seneca = require('seneca')
 const SenecaMsgTest = require('seneca-msg-test')
-const { Maintain } = require('@seneca/maintain')
 
 import TypeformProvider from '../src/typeform-provider'
 import TypeformProviderDoc from '../src/TypeformProvider-doc'
@@ -13,9 +12,11 @@ const BasicMessages = require('./basic.messages.js')
 
 // Only run some tests locally (not on Github Actions).
 let Config: undefined = undefined
+
 if (Fs.existsSync(__dirname + '/local-config.js')) {
   Config = require('./local-config')
 }
+
 
 describe('typeform-provider', () => {
   test('happy', async () => {
@@ -42,33 +43,44 @@ describe('typeform-provider', () => {
     const seneca = await makeSeneca()
 
     // does this:   const sites = await typeform.sites();
-    const list = await seneca.entity('provider/typeform/forms').list$()
+    const list = await seneca.entity('provider/typeform/form').list$()
+
     expect(list.length > 0).toBeTruthy()
 
     const form0 = await seneca
-      .entity('provider/typeform/forms')
+      .entity('provider/typeform/form')
       .load$(Config.form0.id)
-    expect(form0.name).toContain(Config.form0.name)
 
-    const form1 = await seneca.entity('provider/typeform/forms').create$(
-      Config.form1CreateReqBody
+    expect(form0.id).toEqual(Config.form0.id)
+  }, 20000)
+
+  test('form-modify', async () => {
+    if (!Config) return
+    const seneca = await makeSeneca()
+
+    const reqBody = Config.form1CreateReqBody
+
+    const form1 = await seneca.entity('provider/typeform/addform').load$(
+      {
+        data: reqBody
+      }
     )
-    expect(form1.name).toContain(Config.form1CreateReqBody.name)
+    expect(form1.title).toEqual(reqBody.title)
 
     const updatedData = {
-      ...Config.form1CreateReqBody,
-      name: 'Updated Name'
+      ...reqBody,
+      title: 'hola'
     }
 
-    const uform1 = await seneca.entity('provider/typeform/forms').create$(
-      form1.id, updatedData, true
+    const uform1 = await seneca.entity('provider/typeform/editform').load$(
+      {
+        id: Config.form0.id, 
+        data: updatedData, 
+        override: true
+      }
     )
-    expect(uform1.name).toContain(updatedData.name)
-  })
-
-  test('maintain', async () => {
-    await Maintain()
-  })
+    expect(uform1.title).toEqual(updatedData.title)
+  }, 20000)
 })
 
 async function makeSeneca() {

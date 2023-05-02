@@ -1,3 +1,3 @@
 module.exports = {
-  TYPEFORM_TOKEN: '<TOKEN>',
+  TYPEFORM_ACCESSTOKEN: '<TYPEFORM-TOKEN>',
 }
