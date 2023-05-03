@@ -1,17 +1,19 @@
 /* Copyright © 2022 Seneca Project Contributors, MIT License. */
 
-import * as Fs from 'fs'
+// import * as Fs from 'fs'
+
+const Fs = require('fs')
 
 const Seneca = require('seneca')
 const SenecaMsgTest = require('seneca-msg-test')
 
-import TypeformProvider from '../src/typeform-provider'
-import TypeformProviderDoc from '../src/TypeformProvider-doc'
+const TypeformProvider = require('../src/typeform-provider')
+const TypeformProviderDoc = require('../src/TypeformProvider-doc')
 
 const BasicMessages = require('./basic.messages.js')
 
 // Only run some tests locally (not on Github Actions).
-let Config: undefined = undefined
+let Config = undefined
 
 if (Fs.existsSync(__dirname + '/local-config.js')) {
   Config = require('./local-config')
@@ -44,7 +46,9 @@ describe('typeform-provider', () => {
 
     // does this:   const sites = await typeform.sites();
     const list = await seneca.entity('provider/typeform/form').list$()
+    console.log('LIST', list)
 
+    
     expect(list.length > 0).toBeTruthy()
 
     const form0 = await seneca

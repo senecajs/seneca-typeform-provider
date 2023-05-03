@@ -34,7 +34,7 @@ function TypeformProvider(this: any, options: TypeformProviderOptions) {
       form: {
         cmd: {
           list: {
-            action: async function (this: any, entsize: any, msg: any) {
+            action: async function(this: any, entsize: any, msg: any) {
               let res = await this.shared.sdk.forms.list()
               let list = res.items.map((data: any) => entsize(data))
               return list
@@ -42,12 +42,12 @@ function TypeformProvider(this: any, options: TypeformProviderOptions) {
           },
 
           load: {
-            action: async function (this: any, entize: any, msg: any) {
+            action: async function(this: any, entize: any, msg: any) {
               let q = msg.q || {}
               let id = q.id
 
               try {
-                let res = await this.shared.sdk.forms.get({uid: id})
+                let res = await this.shared.sdk.forms.get({ uid: id })
                 return entize(res)
               } catch (e: any) {
                 if (e.message.includes('invalid id')) {
@@ -64,7 +64,7 @@ function TypeformProvider(this: any, options: TypeformProviderOptions) {
       addform: {
         cmd: {
           load: {
-            action: async function (this: any, entsize: any, msg: any) {
+            action: async function(this: any, entsize: any, msg: any) {
               let q = msg.q || {}
               let data = q.data
 
@@ -86,28 +86,28 @@ function TypeformProvider(this: any, options: TypeformProviderOptions) {
       editform: {
         cmd: {
           load: {
-            action: async function (this: any, entsize: any, msg: any) {
-                let q = msg.q || {}
-                let id = q.id
-                let data = q.data
-                let override = q.override
-  
-                try {
-                  let res = await this.shared.sdk.forms.update(
-                    {
-                      uid: id, 
-                      data: data, 
-                      override: override
-                    }
-                  )
-                  return entsize(res)
-                } catch (e: any) {
-                  if (e.message.includes('invalid id')) {
-                    return null
-                  } else {
-                    throw e
+            action: async function(this: any, entsize: any, msg: any) {
+              let q = msg.q || {}
+              let id = q.id
+              let data = q.data
+              let override = q.override
+
+              try {
+                let res = await this.shared.sdk.forms.update(
+                  {
+                    uid: id,
+                    data: data,
+                    override: override
                   }
+                )
+                return entsize(res)
+              } catch (e: any) {
+                if (e.message.includes('invalid id')) {
+                  return null
+                } else {
+                  throw e
                 }
+              }
             },
           },
         }
@@ -115,12 +115,14 @@ function TypeformProvider(this: any, options: TypeformProviderOptions) {
     },
   })
 
-  seneca.prepare(async function (this: any) {
+  seneca.prepare(async function(this: any) {
     let res = await this.post(
       'sys:provider,get:keymap,provider:typeform,key:accesstoken'
     )
 
     let token = res.keymap.accesstoken.value
+
+    console.log('TOKEN', token)
 
     this.shared.sdk = createClient({ token })
   })
