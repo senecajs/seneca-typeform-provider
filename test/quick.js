@@ -1,15 +1,15 @@
-const Webflow = require('webflow-api')
-const token = require('./local-env').WEBFLOW_ACCESSTOKEN
+const Typeform = require('typeform-api')
+const token = require('./local-env').TYPEFORM_ACCESSTOKEN
 
 run()
 
 async function run() {
   // initialize the client with the access token
-  const webflow = new Webflow({ token })
+  const typeform = new Typeform({ token })
 
-  const col = await webflow.collection({
-    collectionId: '',
+  const col = await typeform.form({
+    id: '',
   })
-  const colItems = await col.items()
-  console.log(colItems)
+  const list = await col.list()
+  console.log(list)
 }

@@ -8,14 +8,14 @@ Seneca({ legacy: false })
     // debug: true,
     file: [__dirname + '/local-env.js;?'],
     var: {
-      $WEBFLOW_ACCESSTOKEN: String,
+      $TYPEFORM_ACCESSTOKEN: String,
     },
   })
   .use('provider', {
     provider: {
-      webflow: {
+      typeform: {
         keys: {
-          accesstoken: { value: '$WEBFLOW_ACCESSTOKEN' },
+          accesstoken: { value: '$TYPEFORM_ACCESSTOKEN' },
         },
       },
     },
@@ -24,8 +24,8 @@ Seneca({ legacy: false })
   .ready(async function () {
     const seneca = this
 
-    console.log(await seneca.post('sys:provider,provider:webflow,get:info'))
+    console.log(await seneca.post('sys:provider,provider:typeform,get:info'))
 
-    const list = await seneca.entity('provider/webflow/site').list$()
+    const list = await seneca.entity('provider/typeform/forms').list$()
     console.log(list.slice(0, 3))
   })
