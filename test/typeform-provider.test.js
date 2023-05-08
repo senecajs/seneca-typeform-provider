@@ -46,16 +46,16 @@ describe('typeform-provider', () => {
 
     // does this:   const sites = await typeform.sites();
     const list = await seneca.entity('provider/typeform/form').list$()
-    console.log('LIST', list)
-
     
     expect(list.length > 0).toBeTruthy()
 
+    const firstItem = list[0]
+
     const form0 = await seneca
       .entity('provider/typeform/form')
-      .load$(Config.form0.id)
+      .load$(firstItem.id)
 
-    expect(form0.id).toEqual(Config.form0.id)
+    expect(form0.id).toEqual(firstItem.id)
   }, 20000)
 
   test('form-modify', async () => {
