@@ -45,8 +45,6 @@ describe('typeform-provider', () => {
 
     // does this:   const sites = await typeform.sites();
     const list = await seneca.entity('provider/typeform/form').list$()
-    console.log('LIST', list)
-
     
     expect(list.length > 0).toBeTruthy()
 
