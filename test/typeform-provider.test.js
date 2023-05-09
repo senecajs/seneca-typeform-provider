@@ -41,7 +41,6 @@ describe('typeform-provider', () => {
   })
 
   test('form-basic', async () => {
-    if (!Config) return
     const seneca = await makeSeneca()
 
     // does this:   const sites = await typeform.sites();
@@ -51,11 +50,13 @@ describe('typeform-provider', () => {
     
     expect(list.length > 0).toBeTruthy()
 
+    const firstItem = list[0]
+
     const form0 = await seneca
       .entity('provider/typeform/form')
-      .load$(Config.form0.id)
+      .load$(firstItem.id)
 
-    expect(form0.id).toEqual(Config.form0.id)
+    expect(form0.id).toEqual(firstItem.id)
   }, 20000)
 
   test('form-modify', async () => {
