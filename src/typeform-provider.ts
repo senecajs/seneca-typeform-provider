@@ -122,8 +122,6 @@ function TypeformProvider(this: any, options: TypeformProviderOptions) {
 
     let token = res.keymap.accesstoken.value
 
-    console.log('TOKEN', token)
-
     this.shared.sdk = createClient({ token })
   })
 

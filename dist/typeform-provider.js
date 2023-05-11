@@ -104,7 +104,6 @@ function TypeformProvider(options) {
     seneca.prepare(async function () {
         let res = await this.post('sys:provider,get:keymap,provider:typeform,key:accesstoken');
         let token = res.keymap.accesstoken.value;
-        console.log('TOKEN', token);
         this.shared.sdk = createClient({ token });
     });
     return {
