@@ -1,12 +1,12 @@
-![Seneca Webflow-Provider](http://senecajs.org/files/assets/seneca-logo.png)
+![Seneca Typeform-Provider](http://senecajs.org/files/assets/seneca-logo.png)
 
-> _Seneca Webflow-Provider_ is a plugin for [Seneca](http://senecajs.org)
+> _Seneca Typeform-Provider_ is a plugin for [Seneca](http://senecajs.org)
 
-Provides access to the Webflow CMS API using the Seneca _provider_
-convention. Webflow CMS API entities are represented as Seneca entities so
+Provides access to the Typeform API using the Seneca _provider_
+convention. Typeform API entities are represented as Seneca entities so
 that they can be accessed using the Seneca entity API and messages.
 
-See [seneca-entity](senecajs/seneca-entity) and the [Seneca Data
+See [@seneca/entity](https://github.com/senecajs/seneca-entity) and the [Seneca Data
 Entities
 Tutorial](https://senecajs.org/docs/tutorials/understanding-data-entities.html) for more details on the Seneca entity API.
 
@@ -22,45 +22,45 @@ Tutorial](https://senecajs.org/docs/tutorials/understanding-data-entities.html) 
 
 ## Quick Example
 
-<!-- ```js
+```js
 // Setup - get the key value (<SECRET>) separately from a vault or
 // environment variable.
-Seneca()
-  // Get API keys using the seneca-env plugin
-  .use('env', {
+const seneca = Seneca()
+  .use('@seneca/entity')
+  // Get API keys using the @seneca/env plugin
+  .use('@seneca/env', {
     var: {
-      $TANGOCARD_APIKEY: String,
-      $TANGOCARD_USERTOKEN: String,
+      $TYPEFORM_ACCESSTOKEN: String,
     },
   })
-  .use('provider', {
+  .use('@seneca/provider', {
     provider: {
-      tangocard: {
+      typeform: {
         keys: {
-          apikey: { value: '$TANGOCARD_APIKEY' },
-          usertoken: { value: '$TANGOCARD_USERTOKEN' },
+          accesstoken: { value: '$TYPEFORM_ACCESSTOKEN' },
         },
       },
     },
   })
-  .use('tangocard-provider')
+  .use('@seneca/typeform-provider')
 
-let board = await seneca
-  .entity('provider/tangocard/board')
-  .load$('<tangocard-board-id>')
+await seneca.ready()
 
-Console.log('BOARD', board)
+const forms = await seneca.entity('provider/typeform/form').list$()
 
-board.desc = 'New description'
-board = await board.save$()
+const form = await seneca
+  .entity('provider/typeform/form')
+  .load$('<typeform-form-id>')
 
-Console.log('UPDATED BOARD', board)
-``` -->
+console.log('FORM', form.title)
+```
 
 ## Install
 
+Requires Seneca 4 and Node.js 24 or later.
+
 ```sh
-$ npm install @seneca/webflow-provider @seneca/env
+$ npm install seneca@^4 @seneca/entity @seneca/provider @seneca/env @seneca/typeform-provider
 ```
 
 ## How to get access

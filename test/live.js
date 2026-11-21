@@ -2,16 +2,15 @@ const Seneca = require('seneca')
 
 Seneca({ legacy: false })
   .test()
-  .use('promisify')
-  .use('entity')
-  .use('env', {
+  .use('@seneca/entity')
+  .use('@seneca/env', {
     // debug: true,
     file: [__dirname + '/local-env.js;?'],
     var: {
       $TYPEFORM_ACCESSTOKEN: String,
     },
   })
-  .use('provider', {
+  .use('@seneca/provider', {
     provider: {
       typeform: {
         keys: {
@@ -26,6 +25,6 @@ Seneca({ legacy: false })
 
     console.log(await seneca.post('sys:provider,provider:typeform,get:info'))
 
-    const list = await seneca.entity('provider/typeform/forms').list$()
+    const list = await seneca.entity('provider/typeform/form').list$()
     console.log(list.slice(0, 3))
   })
